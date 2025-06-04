@@ -1,0 +1,14 @@
+{
+    "manifest_version": 3,
+    "name": "ProductivityManager",
+    "version": "1.0.0",
+    "description": "Productivity manager for daily use as a chrome extension",
+    "action": {
+        "default_popup": "../index.html"
+    },
+    "permissions": ["scripting", "storage"],
+    "host_permissions": ["https://*/*", "http://*/*"],
+    "icons": {
+        "64": "fast.png"
+    }
+}
