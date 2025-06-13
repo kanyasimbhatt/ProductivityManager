@@ -1,5 +1,6 @@
-import { useState, type ChangeEvent, type FormEvent } from 'react'
+import { useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 import Navbar from './Navbar'
+import { useNavigate } from 'react-router-dom'
 
 type InputType = {
     name: string
@@ -15,22 +16,23 @@ const InitialInput: InputType = {
 
 const AddFocus = () => {
     const [inputData, setInputData] = useState<InputType>(InitialInput)
+    const focusModes = useRef([])
+    chrome.storage.local.get(['focusData']).then((result) => {
+        focusModes.current = JSON.parse(result['focusData'])
+    })
+
+    const navigate = useNavigate()
     const handleFocusSubmit = (event: FormEvent) => {
         event.preventDefault()
-        console.log('hello')
-        const focusArray = chrome.storage.local.get(
-            'focus-data',
-            function (result) {
-                if (chrome.runtime.lastError) {
-                    console.error(
-                        'Error retrieving data:',
-                        chrome.runtime.lastError
-                    )
-                }
-                return result.push(inputData)
-            }
-        )
-        console.log(focusArray)
+
+        chrome.storage.local
+            .set({
+                focusData: JSON.stringify([...focusModes.current, inputData]),
+            })
+            .then(() => {
+                console.log('Data added in local storage')
+                navigate('/')
+            })
 
         // chrome.storage.local.set({ 'focus-data': JSON.stringify(focusArray) })
     }
@@ -59,6 +61,7 @@ const AddFocus = () => {
                             onChange={(e) => handleChange(e, 'name')}
                             className="w-full rounded p-2"
                             placeholder="Study"
+                            required
                         />
                     </div>
                     <div className="flex flex-col">
@@ -69,6 +72,7 @@ const AddFocus = () => {
                             onChange={(e) => handleChange(e, 'sites')}
                             placeholder="https://instagram.com https://snapchat.com"
                             value={inputData.sites}
+                            required
                         />
                     </div>
                     <div className="flex flex-col">
