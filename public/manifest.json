@@ -6,9 +6,21 @@
     "action": {
         "default_popup": "../index.html"
     },
-    "permissions": ["scripting", "storage"],
+    "permissions": ["scripting", "storage", "webRequest", "declarativeNetRequest", "declarativeNetRequestFeedback"],
+    "background" : {
+        "service_worker" : "background.js" 
+    },
     "host_permissions": ["https://*/*", "http://*/*"],
     "icons": {
         "64": "fast.png"
+    },
+    "declarative_net_requests": {
+        "rule_resources": [
+            {
+                "id": "ruleset_1",
+                "enabled": true,
+                "path": "ruleset1.json"
+            }
+        ]
     }
 }

@@ -18,23 +18,25 @@ const AddFocus = () => {
     const [inputData, setInputData] = useState<InputType>(InitialInput)
     const focusModes = useRef([])
     chrome.storage.local.get(['focusData']).then((result) => {
-        focusModes.current = JSON.parse(result['focusData'])
+        focusModes.current = JSON.parse(result['focusData']) || []
     })
 
     const navigate = useNavigate()
     const handleFocusSubmit = (event: FormEvent) => {
         event.preventDefault()
+        const storeArray = [
+            ...focusModes.current,
+            { id: crypto.randomUUID(), ...inputData },
+        ]
 
         chrome.storage.local
             .set({
-                focusData: JSON.stringify([...focusModes.current, inputData]),
+                focusData: JSON.stringify(storeArray),
             })
             .then(() => {
                 console.log('Data added in local storage')
                 navigate('/')
             })
-
-        // chrome.storage.local.set({ 'focus-data': JSON.stringify(focusArray) })
     }
 
     const handleChange = (
@@ -70,7 +72,7 @@ const AddFocus = () => {
                             className="w-full rounded p-2"
                             id="sites"
                             onChange={(e) => handleChange(e, 'sites')}
-                            placeholder="https://instagram.com https://snapchat.com"
+                            placeholder="https://www.instagram.com https://www.snapchat.com"
                             value={inputData.sites}
                             required
                         />

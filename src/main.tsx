@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import FocusModes from './Components/FocusModes.tsx'
 import AddFocus from './Components/AddFocus.tsx'
+import SelectedModeProvider from './Components/SelectedModeProvider.tsx'
 
 const Routes = createHashRouter([
     {
@@ -18,6 +19,8 @@ const Routes = createHashRouter([
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-        <RouterProvider router={Routes} />
+        <SelectedModeProvider>
+            <RouterProvider router={Routes} />
+        </SelectedModeProvider>
     </StrictMode>
 )
